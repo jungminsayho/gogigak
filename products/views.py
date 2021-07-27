@@ -64,6 +64,8 @@ class ProductsView(View):
                 'price-asc' : 'price'
             }
 
+            products = Product.objects.filter(q)
+
             results = {
                 'category_image': category.image if category else None,
                 'items': [
@@ -78,7 +80,7 @@ class ProductsView(View):
                         'reviews'  : product.reviews,
                         'options'  : [{'id': option.id, 'name': option.name} for option in product.options.all()],
                         'stock'    : product.stock
-                    } for product in Product.objects.filter(q).order_by(sort_dict.get(sort, 'id'))]
+                    } for product in products.prefetch_related('options').order_by(sort_dict.get(sort, 'id'))]
                 }
 
             return JsonResponse({'results': results}, status=200)
@@ -148,6 +150,6 @@ class ReviewView(View):
             'image'         : review.image_url,
             'createdAt'     : review.created_at,
             'myReview'      : True if review.user == signed_user else False
-        } for review in Review.objects.filter(product_id=product_id).order_by('-id')]
+        } for review in Review.objects.select_related('user').filter(product_id=product_id).order_by('-id')]
 
         return JsonResponse({'results': results}, status=200)
