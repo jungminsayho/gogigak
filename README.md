@@ -27,7 +27,6 @@
 > - Back-End : Python, Django, MySQL, Bcrypt, pyJWT
 > - Common : AWS(EC2,RDS), RESTful API
 
-<br>
 
 ### 협업 도구
 Slack / Git + GitHub / Trello, Notion를 이용해 일정관리, 현황을 관리하였습니다. 
